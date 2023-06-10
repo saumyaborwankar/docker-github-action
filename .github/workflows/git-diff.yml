@@ -9,16 +9,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Verify HEAD^ reference
-        id: verify-ref
+      - name: Get Previous Commit
+        id: previous-commit
         run: |
-          if git rev-parse --quiet --verify HEAD^; then
-            echo "::set-output name=ref::HEAD^"
-          else
-            echo "::set-output name=ref::$(git rev-parse HEAD~1)"
-          fi
+          echo "::set-output name=commit-hash::$(git log --pretty=format:%H | tail -n 1)"
 
       - name: Run Git Diff
         run: |
-          git diff --name-only ${{ steps.verify-ref.outputs.ref }}
-          echo "::set-output name=diff-files::$(git diff --name-only ${{ steps.verify-ref.outputs.ref }})"
+          git diff --name-only ${{ steps.previous-commit.outputs.commit-hash }}
+          echo "::set-output name=diff-files::$(git diff --name-only ${{ steps.previous-commit.outputs.commit-hash }})"
