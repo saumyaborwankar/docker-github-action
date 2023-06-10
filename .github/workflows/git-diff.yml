@@ -19,5 +19,5 @@ jobs:
           for file in ${{ steps.changed-files.outputs.changed_files }}; do
               echo "$file was changed"
               echo "${{ github.head_ref }}"
-              echo "${{ github.sha }}""
+              echo "${{ github.sha }}"
           done
