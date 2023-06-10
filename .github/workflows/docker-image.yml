@@ -16,7 +16,7 @@ jobs:
 
       - name: Set matrix
         id: set-matrix
-        run: echo "matrix=$(bash ./bin/generate_matrix.sh ${{ github.event.before }} ${{ github.event.after }} )" >> $GITHUB_OUTPUT
+        run: echo "matrix=$(bash ./bin/generate_matrix.sh ${{ github.event.before }} ${{ github.event.after }} | xargs )" >> $GITHUB_OUTPUT
   docker:
     needs:
       - generate-matrix
