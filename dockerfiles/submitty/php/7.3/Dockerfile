@@ -219,4 +219,7 @@ RUN set -eux; \
 RUN cd /usr/bin \
 	&& ln -s /usr/local/bin/php php
 
+
+
+
 CMD ["/bin/bash"]

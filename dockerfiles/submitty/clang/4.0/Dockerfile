@@ -15,4 +15,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && ln -s /usr/bin/clang-3.8 /usr/bin/clang \
     && ln -s /usr/bin/clang++-3.8 /usr/bin/clang++
+
+
+    
 CMD ["/bin/bash"]
