@@ -1,0 +1,53 @@
+name: Docker Push Final
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 0 }}
+      - name: Get changed files
+        id: changed-files
+        run: |
+          echo "changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | xargs)" >> $GITHUB_OUTPUT
+      - name: List changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.changed_files }}; do
+              echo "$file was changed"
+          done
+      - name: Set Matrix
+        id: set-matrix
+        run: echo "matrix=$(bash ./bin/generate_matrix.sh ${{ github.event.before }} ${{ github.event.after }} | xargs )" >> $GITHUB_OUTPUT
+
+      - name: List Matrix
+        run: echo ${{ steps.set-matrix.outputs.matrix }}
+  docker:
+    needs:
+      - generate-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Docker Hub login
+        uses: docker/login-action@releases/v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
+
+      - name: Build and push docker
+        uses: docker/build-push-action@releases/v3
+        with:
+          context: ${{ matrix.context }}
+          push: true
+          tags: ${{ matrix.tags }}
