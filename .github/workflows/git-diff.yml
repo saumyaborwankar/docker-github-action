@@ -15,10 +15,11 @@ jobs:
           echo "COMMIT_HASH=$(git log --pretty=format:%H | tail -n 1)" >> $GITHUB_ENV
 
       - name: Run Git Diff
+        id: git-diff
         run: |
           git diff --name-only $COMMIT_HASH
           echo "DIFF_FILES=$(git diff --name-only $COMMIT_HASH)" >> $GITHUB_ENV
 
       - name: Use Git Diff Output
         run: |
-          echo "Changed files: $DIFF_FILES"
+          echo "Changed files: ${{ env.DIFF_FILES }}"
