@@ -18,6 +18,10 @@ jobs:
         run: |
           for file in ${{ steps.changed-files.outputs.changed_files }}; do
               echo "$file was changed"
-              echo "${{ github.head_ref }}"
-              echo "${{ github.sha }}"
           done
+      - name: Set Matrix
+        id: set-matrix
+        run: echo "matrix=$(bash ./bin/generate_matrix.sh ${{ github.event.before }} ${{ github.event.after }} | xargs )" >> $GITHUB_OUTPUT
+
+      - name: List Matrix
+        run: echo ${{ steps.set-matrix.outputs.matrix }}
