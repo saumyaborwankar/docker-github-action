@@ -24,7 +24,7 @@ for file_path in ${changed_dockerfile_path}; do
     updated_path=$(echo "$file_path" | sed 's/\/Dockerfile$//')
 
     # echo -n "{\"context\": \"${updated_path}\", \"tags\": \"${university}/${docker_name}:${docker_tag}\"},"
-    echo -n "{\"context\": \"${docker_name}\", \"tags\": \"${docker_name}\"}"
+    echo -n "{\"version\": \"${docker_name}\", \"adapter\": \"${docker_name}\"}"
 
 
     # ((index++))
