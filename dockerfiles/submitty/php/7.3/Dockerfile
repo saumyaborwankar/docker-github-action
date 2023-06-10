@@ -15,6 +15,7 @@ RUN apt-get update \
 
 # prevent Debian's PHP packages from being installed
 # https://github.com/docker-library/php/pull/542
+
 RUN set -eux; \
   { \
     echo 'Package: php*'; \
