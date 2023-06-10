@@ -8,7 +8,8 @@ RUN apt-get update \
       procps \
     && rm -rf /var/lib/apt/lists/*
 
-    
+
+
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
       clang-3.8 \
