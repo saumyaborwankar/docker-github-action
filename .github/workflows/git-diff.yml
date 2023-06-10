@@ -12,9 +12,13 @@ jobs:
       - name: Get Previous Commit
         id: previous-commit
         run: |
-          echo "::set-output name=commit-hash::$(git log --pretty=format:%H | tail -n 1)"
+          echo "COMMIT_HASH=$(git log --pretty=format:%H | tail -n 1)" >> $GITHUB_ENV
 
       - name: Run Git Diff
         run: |
-          git diff --name-only ${{ steps.previous-commit.outputs.commit-hash }}
-          echo "::set-output name=diff-files::$(git diff --name-only ${{ steps.previous-commit.outputs.commit-hash }})"
+          git diff --name-only $COMMIT_HASH
+          echo "DIFF_FILES=$(git diff --name-only $COMMIT_HASH)" >> $GITHUB_ENV
+
+      - name: Use Git Diff Output
+        run: |
+          echo "Changed files: $DIFF_FILES"
