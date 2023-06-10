@@ -12,6 +12,8 @@ import sys
 # to use this script run this in the repository root:
 # python3 make_github_action.py > .github/workflows/dockerhub_push.yml
 
+
+
 def log_err(a: str):
     sys.stderr.write(a+'\n')
 
