@@ -23,7 +23,6 @@ RUN apt-get update \
     && apt-get -y install cmake\
     && apt-get -y install make\
     && rm -rf /var/lib/apt/lists/* \
-
     && ln -s /usr/bin/clang-3.8 /usr/bin/clang \
     && ln -s /usr/bin/clang++-3.8 /usr/bin/clang++
 
