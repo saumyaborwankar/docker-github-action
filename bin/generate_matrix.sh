@@ -23,7 +23,7 @@ for file_path in ${changed_dockerfile_path}; do
     # removing the last Dockerfile from the file path
     updated_path=$(echo "$file_path" | sed 's/\/Dockerfile$//')
 
-    echo -n '{\"context\": \""'"${updated_path}"'"\", \"tags\": /"'"${docker_name}"'":"'"${docker_tag}"'"\"},'
+    echo -n '{\"context\": \""'"${updated_path}"'"\", \"tags\": /""'"${docker_name}"'":"'"${docker_tag}"'"\"},'
     # echo -n "{\"version\": \"${docker_name}\", \"adapter\": \"${docker_name}\"}"
 
 
