@@ -25,9 +25,9 @@ jobs:
         run: |
           number_of_changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '/Dockerfile$' | wc -l)
           if [[ "$number_of_changed_files" -gt 0 ]]; then
-          echo "run_docker_jobs=true" >> $GITHUB_ENV
+            echo "run_docker_jobs=true" >> $GITHUB_OUTPUT
           else
-          echo "run_docker_jobs=false" >> $GITHUB_ENV
+            echo "run_docker_jobs=false" >> $GITHUB_OUTPUT
           fi
       - name: List changed files
         run: |
