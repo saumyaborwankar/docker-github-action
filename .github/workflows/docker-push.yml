@@ -51,4 +51,4 @@ jobs:
         with:
           context: ${{ matrix.context }}
           push: true
-          tags: saumyaborwankar/submitty-saumya:v1
+          tags: saumyaborwankar/submitty-saumya:v2
