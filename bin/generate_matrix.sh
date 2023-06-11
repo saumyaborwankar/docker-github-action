@@ -10,7 +10,7 @@ total_files=$(echo "${changed_dockerfile_path}" | wc -l)
 
 # i dont exactly know why we write include in the json that we are creating for the matrix but if it works it works
 # if someone knows let me know. Thanks
-echo -n '{"include": ['
+echo -n '{\"include\": ['
 
 # loop over the filepaths to make the context and tag for github action
 index=0
@@ -23,7 +23,7 @@ for file_path in ${changed_dockerfile_path}; do
     # removing the last Dockerfile from the file path
     updated_path=$(echo "$file_path" | sed 's/\/Dockerfile$//')
 
-    echo -n '{\"context\": \"${updated_path}\", \"tags\": \"${university}/${docker_name}:${docker_tag}\"},'
+    echo -n '{\"context\": \""'"${updated_path}"'"\", \"tags\": \""'"${university}"'"/"'"${docker_name}"'":"'"${docker_tag}"'"\"},'
     # echo -n "{\"version\": \"${docker_name}\", \"adapter\": \"${docker_name}\"}"
 
 
@@ -33,7 +33,7 @@ for file_path in ${changed_dockerfile_path}; do
     # fi
 done
 
-echo -n "]}"
+echo -n ']}'
 
 
 # echo -n '{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}'
