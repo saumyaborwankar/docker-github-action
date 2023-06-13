@@ -6,7 +6,7 @@
         },
         {
             "docker_name":"verilog",
-            "tag":"v2"
+            "tag":"v3"
         }
     ]
 }
