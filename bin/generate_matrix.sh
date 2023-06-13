@@ -24,7 +24,7 @@ for file_path in ${changed_dockerfile_path}; do
         # removing the last Dockerfile from the file path
         updated_path=$(echo "$file_path" | sed 's/\/Dockerfile$//')
 
-        echo -n '{\"context\": \""'"${updated_path}"'"\", \"dockername\": \""'"${docker_name}"'", \"tag\" :"'"${docker_tag}"'"\"},' # modularize
+        echo -n '{\"context\": \""'"${updated_path}"'"\", \"dockername\": \""'"${docker_name}"'"\", \"tag\" :\""'"${docker_tag}"'"\"},' # modularize
         # echo -n '{\"context\": \""'"${updated_path}"'"\", \"tags\": \""'"${university}"'"/"'"${docker_name}"'":"'"${docker_tag}"'"\"},' # for 2 names
 
 
