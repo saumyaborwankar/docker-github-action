@@ -4,8 +4,8 @@ set -e
 
 # # gives the path of the dockerfiles that have been modified/added in the last commit to main
 changed_dockerfile_path=$(git diff --name-only $1 $2 | grep '/Dockerfile$')
-number_of_changed_files=$(git diff --name-only $1 $2 | grep -E '^.*\/submitty\/[^/]+\/[^/]+\/Dockerfile$' | wc -l )
-echo $number_of_changed_files
+# number_of_changed_files=$(git diff --name-only $1 $2 | grep -E '^.*\/submitty\/[^/]+\/[^/]+\/Dockerfile$' | wc -l )
+# echo $number_of_changed_files
 # Count the number of file paths
 total_files=$(echo "${changed_dockerfile_path}" | wc -l)
 
