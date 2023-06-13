@@ -48,6 +48,8 @@ jobs:
     needs:
       - generate-matrix
     if: needs.generate-matrix.outputs.run_docker_jobs == 'true'
+    outputs: 
+      run_docker_latest: ${{ steps.set-latest.outputs.latest }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -66,6 +68,11 @@ jobs:
           context: ${{ matrix.context }}
           push: true
           tags: saumyaborwankar/${{ matrix.dockername }}:${{ matrix.tag }} #if matrix.tag has only 1 attribute you can set that from generate_matrix.sh currently it has 1 variable (clang:4.0) but it can have submitty/clang:4 so this wont work
+      - name: check if latest
+        id: set-latest
+        run: |
+          echo "latest=${{ matrix.latest }}" >> $GITHUB_OUTPUT
+          echo "$latest"
       - name: Build and push docker latest
         if: ${{ matrix.latest }} == 'true'
         uses: docker/build-push-action@v4
