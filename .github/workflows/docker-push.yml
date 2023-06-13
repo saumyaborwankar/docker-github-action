@@ -23,7 +23,7 @@ jobs:
       - name: Count number of files changed
         id: set-run-docker-jobs
         run: |
-          number_of_changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '/submitty/[^/]\+[^/]\+/Dockerfile$' | wc -l)
+          number_of_changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep -E '^.*\/submitty\/[^/]+\/[^/]+\/Dockerfile$' | wc -l)
           echo $number_of_changed_files
           if [[ "$number_of_changed_files" -gt 0 ]]; then
             echo "run_docker_jobs=true" >> $GITHUB_OUTPUT
