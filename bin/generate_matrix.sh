@@ -15,22 +15,24 @@ echo -n '{\"include\": ['
 # loop over the filepaths to make the context and tag for github action
 index=0
 for file_path in ${changed_dockerfile_path}; do
-    
-    docker_tag=$(basename $(dirname "$file_path"))
-    docker_name=$(basename $(dirname $(dirname "$file_path")))
-    university=$(basename $(dirname $(dirname $(dirname "$file_path"))))
+    if [[ $file_path =~ ^.*/submitty/[^/]+/[^/]+/Dockerfile$ ]]; then
 
-    # removing the last Dockerfile from the file path
-    updated_path=$(echo "$file_path" | sed 's/\/Dockerfile$//')
+        docker_tag=$(basename $(dirname "$file_path"))
+        docker_name=$(basename $(dirname $(dirname "$file_path")))
+        university=$(basename $(dirname $(dirname $(dirname "$file_path"))))
 
-    echo -n '{\"context\": \""'"${updated_path}"'"\", \"tags\": \""'"${docker_name}"'":"'"${docker_tag}"'"\"},' #for one name
-    # echo -n '{\"context\": \""'"${updated_path}"'"\", \"tags\": \""'"${university}"'"/"'"${docker_name}"'":"'"${docker_tag}"'"\"},' # for 2 names
+        # removing the last Dockerfile from the file path
+        updated_path=$(echo "$file_path" | sed 's/\/Dockerfile$//')
+
+        echo -n '{\"context\": \""'"${updated_path}"'"\", \"dockername\": \""'"${docker_name}"'", \"tag\" :"'"${docker_tag}"'"\"},' # modularize
+        # echo -n '{\"context\": \""'"${updated_path}"'"\", \"tags\": \""'"${university}"'"/"'"${docker_name}"'":"'"${docker_tag}"'"\"},' # for 2 names
 
 
-    # ((index++))
-    # if [ "${index}" -ne "${total_files}" ]; then
-    #         echo -n "last runnnnnnnnnn"     # Add space if it's not the last run
-    # fi
+        # ((index++))
+        # if [ "${index}" -ne "${total_files}" ]; then
+        #         echo -n "last runnnnnnnnnn"     # Add space if it's not the last run
+        # fi
+    fi
 done
 
 echo -n ']}'
