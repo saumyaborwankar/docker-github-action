@@ -67,9 +67,10 @@ jobs:
           push: true
           tags: saumyaborwankar/${{ matrix.dockername }}:${{ matrix.tag }} #if matrix.tag has only 1 attribute you can set that from generate_matrix.sh currently it has 1 variable (clang:4.0) but it can have submitty/clang:4 so this wont work
       - name: Build and push docker latest
+        if: ${{ matrix.latest }} == 'true'
         uses: docker/build-push-action@v4
         with:
-          if: ${{ matrix.latest }} == 'true'
           context: ${{ matrix.context }}
           push: true
           tags: saumyaborwankar/${{ matrix.dockername }}:latest #if matrix.tag has only 1 attribute you can set that from generate_matrix.sh currently it has 1 variable (clang:4.0) but it can have submitty/clang:4 so this wont work
+      
