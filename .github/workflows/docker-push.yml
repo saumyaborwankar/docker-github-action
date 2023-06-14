@@ -11,6 +11,8 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       run_docker_jobs: ${{ steps.set-run-docker-jobs.outputs.run_docker_jobs }}
+      run_latest_docker_jobs: ${{ steps.set-run-docker-jobs.outputs.run_latest_docker_jobs }}
+      latest-matrix: ${{ steps.set-matrix.outputs.latest-matrix }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -30,6 +32,14 @@ jobs:
           else
             echo "run_docker_jobs=false" >> $GITHUB_OUTPUT
           fi
+
+          echo "number_of_changed_latest_files=$(bash ./bin/check_docker_latest_run.sh ${{ github.event.before }} ${{ github.event.after }} | xargs )" >> $GITHUB_OUTPUT
+          echo $number_of_changed_latest_files
+          if [[ "$number_of_changed_latest_files" -gt 0 ]]; then
+            echo "run_latest_docker_jobs=true" >> $GITHUB_OUTPUT
+          else
+            echo "run_latest_docker_jobs=false" >> $GITHUB_OUTPUT
+          fi
       - name: List changed files
         run: |
           for file in ${{ steps.changed-files.outputs.changed_files }}; do
@@ -37,13 +47,16 @@ jobs:
           done
       - name: Set Matrix
         id: set-matrix
-        run: echo "matrix=$(bash ./bin/generate_matrix.sh ${{ github.event.before }} ${{ github.event.after }} | xargs )" >> $GITHUB_OUTPUT
+        run: |
+          echo "matrix=$(bash ./bin/generate_matrix.sh ${{ github.event.before }} ${{ github.event.after }} | xargs )" >> $GITHUB_OUTPUT
+          echo "latest-matrix=$(bash ./bin/generate_latest_matrix.sh ${{ github.event.before }} ${{ github.event.after }} | xargs )" >> $GITHUB_OUTPUT
         # run: echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
 
       - name: List Matrix
         run: |
           echo ${{ steps.set-matrix.outputs.matrix }}
           echo ${{ steps.set-run-docker-jobs.outputs.run_docker_jobs }}
+          echo ${{ steps.set-matrix.outputs.latest-matrix }}
   docker:
     needs:
       - generate-matrix
@@ -68,13 +81,23 @@ jobs:
           context: ${{ matrix.context }}
           push: true
           tags: saumyaborwankar/${{ matrix.dockername }}:${{ matrix.tag }} #if matrix.tag has only 1 attribute you can set that from generate_matrix.sh currently it has 1 variable (clang:4.0) but it can have submitty/clang:4 so this wont work
-      - name: check if latest
-        id: set-latest
-        run: |
-          echo "latest=${{ matrix.latest }}" >> $GITHUB_OUTPUT
-          echo "$latest"
-      - name: Build and push docker latest
-        if: ${{ matrix.latest }} == 'true'
+  docker-latest:
+    needs:
+      - generate-matrix
+    if: needs.generate-matrix.outputs.run_docker_latest_jobs == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.latest-matrix) }}
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Docker Hub login
+        uses: docker/login-action@releases/v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
+      - name: Build and push docker
         uses: docker/build-push-action@v4
         with:
           context: ${{ matrix.context }}

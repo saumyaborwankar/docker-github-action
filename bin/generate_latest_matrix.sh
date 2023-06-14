@@ -9,6 +9,21 @@ changed_dockerfile_path=$(git diff --name-only $1 $2 | grep '/Dockerfile$')
 # Count the number of file paths
 total_files=$(echo "${changed_dockerfile_path}" | wc -l)
 
+
+# json_file="D:\Development\docker-github-action\latest.json"
+json_file="./latest.json"
+
+# Read the JSON file into a variable
+json_data=$(cat "$json_file")
+
+# Extract values using string manipulation and pattern matching
+docker_names=$(echo "$json_data" | grep -o '"docker_name":"[^"]*' | awk -F'"' '{print $4}')
+docker_tags=$(echo "$json_data" | grep -o '"tag":"[^"]*' | awk -F'"' '{print $4}')
+
+# Convert latest_docker_names to an array
+readarray -t latest_docker_names <<< "$docker_names"
+readarray -t latest_docker_tags <<< "$docker_tags"
+
 # # Iterate over the docker_names_array
 # for docker_name in "${docker_names_array[@]}"; do
 #     echo "Docker Name: $docker_name"
@@ -29,11 +44,25 @@ for file_path in ${changed_dockerfile_path}; do
         docker_name=$(basename $(dirname $(dirname "$file_path")))
         university=$(basename $(dirname $(dirname $(dirname "$file_path"))))
 
+        found=false
+        for ((i = 0; i < ${#latest_docker_names[@]}; i++)); do
+            # echo -e "$i \n"
+            # echo "${latest_docker_names[i]} ---- $docker_name" 
+            # echo "${latest_docker_tags[i]} ---- $docker_tag"
+            if [[ "${latest_docker_names[i]}" == "$docker_name" && "${latest_docker_tags[i]}" == "$docker_tag" ]]; then
+            # echo "founnddeddd"
+                found=true
+                break
+            fi
+        done
         # removing the last Dockerfile from the file path
         updated_path=$(echo "$file_path" | sed 's/\/Dockerfile$//')
 
-        echo -n '{\"context\": \""'"$updated_path"'"\", \"dockername\": \""'"$docker_name"'"\", \"tag\" :\""'"$docker_tag"'"\"},' # modularize
-        # echo -n '{\"context\": \""'"${updated_path}"'"\", \"tags\": \""'"${university}"'"/"'"${docker_name}"'":"'"${docker_tag}"'"\"},' # for 2 names
+        if [[ "$found" == true ]]; then
+            # echo ""
+            echo -n '{\"context\": \""'"$updated_path"'"\", \"dockername\": \""'"$docker_name"'"\", \"tag\" :\""'"$docker_tag"'"\"},' # modularize
+        fi
+        
 
         # ((index++))
         # if [ "${index}" -ne "${total_files}" ]; then
