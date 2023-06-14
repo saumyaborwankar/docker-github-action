@@ -57,6 +57,7 @@ jobs:
           echo ${{ steps.set-matrix.outputs.matrix }}
           echo ${{ steps.set-run-docker-jobs.outputs.run_docker_jobs }}
           echo ${{ steps.set-matrix.outputs.latest-matrix }}
+          echo ${{ steps.set-run-docker-jobs.outputs.run_latest_docker_jobs }}
   docker:
     needs:
       - generate-matrix
