@@ -85,7 +85,7 @@ jobs:
   docker-latest:
     needs:
       - generate-matrix
-    if: needs.generate-matrix.outputs.run_docker_latest_jobs == 'true'
+    if: needs.generate-matrix.outputs.run_latest_docker_jobs == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
