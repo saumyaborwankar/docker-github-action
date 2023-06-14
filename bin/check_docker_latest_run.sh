@@ -57,8 +57,7 @@ for file_path in ${changed_dockerfile_path}; do
         updated_path=$(echo "$file_path" | sed 's/\/Dockerfile$//')
 
         if [[ "$found" == true ]]; then
-        echo -n "doung"
-            ((count++))
+            ((count=count+1))
         fi
     fi
 done
