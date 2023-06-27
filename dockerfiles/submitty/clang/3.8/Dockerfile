@@ -7,16 +7,6 @@ RUN apt-get update \
       libseccomp2 \
       procps \
     && rm -rf /var/lib/apt/lists/*
-
-
-
-
-
-
-
-
-
-
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
       clang-3.8 \
@@ -25,10 +15,4 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && ln -s /usr/bin/clang-3.8 /usr/bin/clang \
     && ln -s /usr/bin/clang++-3.8 /usr/bin/clang++
-
-
-    
-
-
-    
 CMD ["/bin/bash"]

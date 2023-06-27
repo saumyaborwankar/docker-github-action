@@ -1,10 +1,5 @@
 FROM debian:stretch-slim
 
-
-
-
-
-
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
       grep \
@@ -20,7 +15,6 @@ RUN apt-get update \
 
 # prevent Debian's PHP packages from being installed
 # https://github.com/docker-library/php/pull/542
-
 RUN set -eux; \
   { \
     echo 'Package: php*'; \
@@ -30,8 +24,6 @@ RUN set -eux; \
 
 # dependencies required for running "phpize"
 # (see persistent deps below)
-
-
 ENV PHPIZE_DEPS \
     autoconf \
     dpkg-dev \
@@ -226,8 +218,5 @@ RUN set -eux; \
 
 RUN cd /usr/bin \
 	&& ln -s /usr/local/bin/php php
-
-
-
 
 CMD ["/bin/bash"]

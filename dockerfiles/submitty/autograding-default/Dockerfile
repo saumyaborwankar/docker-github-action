@@ -4,16 +4,7 @@
 # any metadata.json file or is made up of components parts. Have to edit
 # this file directly.
 
-
-
-
-
-
-
-
 FROM ubuntu:18.04
-
-
 
 RUN apt-get update
 RUN apt-get install -qqy python python-dev python3 python3-dev libpython3.5
@@ -28,8 +19,6 @@ RUN apt-get install -qqy imagemagick
 ENV DRMEMORY_TAG release_2.5.0
 ENV DRMEMORY_VERSION 2.5.0
 ENV AnalysisTools_Version v.18.06.00
-
-
 ENV SUBMITTY_INSTALL_DIR /usr/local/submitty
 
 RUN apt-get update \
@@ -49,20 +38,11 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove wget \
     && rm -rf /var/lib/apt/lists/*
 
-
-
-
-
-
-
-
 RUN mkdir -p /var/local/submitty/autograding_tmp
 #RUN mkdir -p /var/local/submitty/autograding_tmp/untrustedtmp/TMP_COMPILATION
 #RUN mkdir -p /var/local/submitty/autograding_tmp/untrustedtmp/TMP_COMPILATION
 #RUN mkdir -p /var/local/submitty/autograding_tmp/untrustedtmp/TMP_WORK
 
 WORKDIR /var/local/submitty/autograding_tmp
-
-
 
 # mount to /usr/src/app
