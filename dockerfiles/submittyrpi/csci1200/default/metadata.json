@@ -1,0 +1,15 @@
+{
+  "hostname": "submittyrpi",
+  "name": "csci1200",
+  "tag": "default",
+  "components": [
+    "core",
+    "clang/6.0",
+    "g++",
+    "drmemory",
+    "valgrind",
+    "imagemagick",
+    "wkhtmltopdf",  
+    "analysis_tools"
+  ]
+}
