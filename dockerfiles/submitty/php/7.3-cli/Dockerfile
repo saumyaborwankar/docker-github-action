@@ -14,5 +14,6 @@ RUN ./php-7.4.33/configure
 RUN make && \
     make install
 
+
 CMD ["/bin/bash"]
 
