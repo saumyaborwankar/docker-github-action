@@ -7,8 +7,6 @@ ENV PATH /usr/local/bin:$PATH
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
 
-
-
 # runtime dependencies
 RUN set -eux; \
 	apt-get update; \
@@ -201,6 +199,9 @@ RUN set -eux; \
 	pip --version
 
 # Install additional packages via pip
+RUN ln -s /usr/local/bin/python3 /usr/bin/python3 \
+	&& ln -s /usr/local/bin/pip3 /usr/bin/pip3
+	
 RUN pip3 install psycopg2-binary lxml
 
 CMD ["/bin/bash"]
